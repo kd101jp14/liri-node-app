@@ -42,7 +42,7 @@ Note: `node liri.js`
 - OMDB (Open Movie Database) API
 
 ## Preview
-![LIRI gif](#)
+![LIRI gif](images/liri_gif.gif)
 
 ## License
 
