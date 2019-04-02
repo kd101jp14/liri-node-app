@@ -80,9 +80,6 @@ switch (command) {
         //     console.log(error);
         // })
         break;
-    case commandString.whatItSays:
-        //
-        break;
     default:
         {
             var movie = formattedInput;
@@ -97,7 +94,7 @@ switch (command) {
         };
 };
 
-// Function for `movie-this` command and the default (when no command or other arguments are entered by the user)
+// Function for `movie-this` command, `do-what-it-says` command, and the default (when no command or other arguments are entered by the user)
 function movieOutput(response) {
     console.log("\n");
     console.log("The movie " + response.data.Title + " was released in " + response.data.Year + ".");
@@ -114,6 +111,7 @@ function movieOutput(response) {
 
 };
 
+// Function for `concert-this` command and the `do-what-it-says` command
 function concertOutput(response) {
     var artist = formattedInput;
     axios.get("https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp")
