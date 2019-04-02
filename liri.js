@@ -33,6 +33,7 @@ switch (command) {
         var artist = formattedInput;
         axios.get("https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp")
             .then(function (response) {
+                console.log("\n");
                 console.log("Here are the next concert locations and dates for " + artist + "!");
                 console.log("\n");
                 for (var i = 0; i < response.data.length; i++) {
@@ -51,18 +52,7 @@ switch (command) {
         var movie = formattedInput;
         axios.get("http://www.omdbapi.com/?apikey=trilogy&t=" + movie)
             .then(function (response) {
-
-                console.log("The movie " + response.data.Title + " was released in " + response.data.Year + ".");
-                console.log("\n");
-                console.log("Its IMDB rating is " + response.data.Ratings[0].Value + ", while its Rotten Tomatoes rating is " + response.data.Ratings[1].Value + ".");
-                console.log("\n");
-                console.log("This movie was produced in " + response.data.Country + ".");
-                console.log("\n");
-                console.log("Movie Language(s): " + response.data.Language + ".");
-                console.log("\n");
-                console.log("Plot: " + response.data.Plot);
-                console.log("\n");
-                console.log("This movie's actors include " + response.data.Actors + ".");
+                movieOutput(response);
             })
             .catch(function (error) {
                 console.log(error);
@@ -94,11 +84,27 @@ switch (command) {
             var movie = formattedInput;
             axios.get("http://www.omdbapi.com/?apikey=trilogy&t=" + "mr+nobody")
             .then(function (response) {
-                console.log(response.data);
+                movieOutput(response);
             })
             .catch(function (error) {
                 console.log(error);
             })
             break;
         };
+}
+
+function movieOutput(response) {
+    console.log("\n");
+    console.log("The movie " + response.data.Title + " was released in " + response.data.Year + ".");
+    console.log("\n");
+    console.log("Its IMDB rating is " + response.data.Ratings[0].Value + ", while its Rotten Tomatoes rating is " + response.data.Ratings[1].Value + ".");
+    console.log("\n");
+    console.log("This movie was produced in " + response.data.Country + ".");
+    console.log("\n");
+    console.log("Movie Language(s): " + response.data.Language + ".");
+    console.log("\n");
+    console.log("Plot: " + response.data.Plot);
+    console.log("\n");
+    console.log("This movie's actors include " + response.data.Actors + ".");
+  
 }
