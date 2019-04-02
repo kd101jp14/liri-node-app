@@ -1,11 +1,12 @@
-// require("dotenv").config();
+require("dotenv").config();
 
 var keys = require("./keys.js");
-
-// var spotify = new Spotify(keys.spotify);
-
+var Spotify = require("node-spotify-api");
+var spotify = new Spotify(keys.spotify);
+var axios = require("axios");
+var moment = require("moment");
+var fs = require("fs");
 var command = process.argv[2];
-
 
 var commandString = {
     concert: "concert-this",
@@ -21,12 +22,29 @@ for (var i = 3; i < nodeArg.length; i++) {
     newArray.push(nodeArg[i]);
     formattedInput = newArray.join("+");
 }
-console.log(command);
-console.log(newArray);
-console.log(formattedInput);
 
-var axios = require("axios");
-var moment = require("moment");
+// if (command === commandString.whatItSays) {
+//     fs.readFile("random.txt", "utf8", function (err, data) {
+//         if (err) {
+//             return console.log(err);
+//         }
+//         var dataArr = data.split(",");
+//         command = dataArr[0];
+//         formattedInput = dataArr[1];
+//         if(command === commandString.concert) {
+//             command = commandString.concert;
+//             return command;
+//         }else if (command ===commandString.song) {
+//             command = commandString.song;
+//             return command;
+//         }else {
+//             command = commandString.movie;
+//             return command;
+//         }
+
+//     })
+// };
+
 
 switch (command) {
     case commandString.concert:
@@ -34,7 +52,7 @@ switch (command) {
         axios.get("https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp")
             .then(function (response) {
                 console.log("\n");
-                console.log("Here are the next concert locations and dates for " + artist + "!");
+                console.log("Here are the next concert locations and dates!");
                 console.log("\n");
                 for (var i = 0; i < response.data.length; i++) {
                     var date = response.data[i].datetime;
@@ -59,25 +77,18 @@ switch (command) {
             })
         break;
     case commandString.song:
-        var song = formattedInput;
-        axios.get("https://api.spotify.com/v1q=" + song + ":abacab&type=track")
-            .then(function (response) {
-                console.log(response.data);
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
+        // var song = formattedInput;
+        // axios.get("https://accounts.spotify.com/authorize/client_id=" + keys.spotify.id +"&response_type=code&redirect_uri=http://localhost:8080/callback/")
+        // axios.get("https://api.spotify.com/v1q=" + song + "&type=track")
+            // .then(function (response) {
+            //     console.log(response.data);
+            // })
+            // .catch(function (error) {
+            //     console.log(error);
+            // })
         break;
     case commandString.whatItSays:
-        var fs = require("fs");
-        fs.readFile("random.txt", "utf8", function (err, data) {
-            if (err) {
-                return console.log(err);
-            }
-            console.log(data);
-            var dataArr = data.split(",");
-            console.log(dataArr);
-        })
+       //
         break;
     default:
         {
@@ -91,7 +102,7 @@ switch (command) {
             })
             break;
         };
-}
+};
 
 function movieOutput(response) {
     console.log("\n");
@@ -106,5 +117,5 @@ function movieOutput(response) {
     console.log("Plot: " + response.data.Plot);
     console.log("\n");
     console.log("This movie's actors include " + response.data.Actors + ".");
-  
-}
+
+};
