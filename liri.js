@@ -27,6 +27,7 @@ for (var i = 3; i < nodeArg.length; i++) {
     formattedInput = newArray.join("+");
 }
 
+// The `do-what-it says` command results in a response based on the text written in `random.txt.`
 if (command === commandString.whatItSays) {
     fs.readFile("random.txt", "utf8", function (err, data) {
         if (err) {
@@ -43,12 +44,12 @@ if (command === commandString.whatItSays) {
         } else {
             command = commandString.movie;
             axios.get("http://www.omdbapi.com/?apikey=trilogy&t=" + formattedInput)
-            .then(function (response) {
-                movieOutput(response);
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
+                .then(function (response) {
+                    movieOutput(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
         }
 
     })
@@ -70,7 +71,16 @@ switch (command) {
             })
         break;
     case commandString.song:
-        // var song = formattedInput;
+
+        // Pseudo code (since there was trouble getting authorization from Spotify)
+        // 1. Take the formatted user input and assign it to song (ex: var song = formattedInput;)
+        // 2. Using axios, make an API call, using the GET method and the search endpoint.
+        //      Insert Spotify keys from the keys.js module and the song variable.
+        // 3. Log the song's artist(s), song name, preview link of the song from Spotify, and the song's album.
+        // 4. If no song is entered, the app defaults to "The Sign" by Ace of Base.
+
+
+        // 
         // axios.get("https://accounts.spotify.com/authorize/client_id=" + keys.spotify.id +"&response_type=code&redirect_uri=http://localhost:8080/callback/")
         // axios.get("https://api.spotify.com/v1q=" + song + "&type=track")
         // .then(function (response) {
