@@ -1,6 +1,7 @@
+// Connect Spotify to the application
 var Spotify = require("node-spotify-api");
 
-// connect `dotenv` to the application
+// Connect `dotenv` to the application
 require("dotenv").config();
 
 // Set variables for dependencies and information from other modules
@@ -11,7 +12,6 @@ var moment = require("moment");
 var fs = require("fs");
 
 // Spotify constructor
-
 function Spotify(id, secret) {
     this.id = id;
     this.secret = secret;
@@ -42,6 +42,7 @@ for (var i = 3; i < nodeArg.length; i++) {
 
 // The `do-what-it says` command results in a response based on the text written in `random.txt.`
 if (command === commandString.whatItSays) {
+    // The following file can also be overwritten to provide concert or movie info.
     fs.readFile("random.txt", "utf8", function (err, data) {
         if (err) {
             return console.log(err);
@@ -53,7 +54,25 @@ if (command === commandString.whatItSays) {
             concertOutput();
         } else if (command === commandString.song) {
             command = commandString.song;
-            return command;
+            spotify
+                .search({
+                    type: 'track',
+                    query: formattedInput
+                })
+                .then(function (response) {
+                    var response = response.tracks.items[0];
+                    console.log("\n");
+                    console.log("Song Title: " + response.name + "\n");
+                    var artists = [];
+                    for (var i = 0; i < response.artists.length; i++) {
+                        artists.push(response.artists[i].name);
+                    };
+                    console.log("Artist(s): " + artists + "\n");
+                    console.log("Album: " + response.album.name + "\n");
+                })
+                .catch(function (err) {
+                    console.log(err);
+                });
         } else {
             command = commandString.movie;
             axios.get("http://www.omdbapi.com/?apikey=trilogy&t=" + formattedInput)
@@ -75,56 +94,36 @@ switch (command) {
         break;
     case commandString.movie:
         var movie = formattedInput;
-        axios.get("http://www.omdbapi.com/?apikey=trilogy&t=" + movie)
-            .then(function (response) {
-                movieOutput(response);
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
+        if (formattedInput == "") {
+            axios.get("http://www.omdbapi.com/?apikey=trilogy&t=" + "mr+nobody")
+                .then(function (response) {
+                    movieOutput(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        } else {
+            axios.get("http://www.omdbapi.com/?apikey=trilogy&t=" + movie)
+                .then(function (response) {
+                    movieOutput(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }
         break;
     case commandString.song:
-        // Pseudo code (since there was trouble getting authorization from Spotify)
-        // 1. Take the formatted user input and assign it to song (ex: var song = formattedInput;)
-        // 2. Using axios, make an API call, using the GET method and the search endpoint.
-        //      Insert Spotify keys from the keys.js module and the song variable.
-        // 3. Log the song's artist(s), song name, preview link of the song from Spotify, and the song's album.
-        // 4. If no song is entered, the app defaults to "The Sign" by Ace of Base.
-            var songSearch = process.argv.slice(3).join(" ");
-
-        spotify
-            .search({
-                type: 'track',
-                query: songSearch
-            })
-            .then(function (response) {
-                var response = response.tracks.items[0];
-                console.log("\n");
-                console.log("Song Title: " + response.name + "\n");
-                var artists = [];
-                for (var i = 0; i < response.artists.length; i++) {
-                    artists.push(response.artists[i].name);
-                };
-                console.log("Artist(s): " + artists + "\n");
-                console.log("Album: " + response.album.name + "\n");
-                console.log(response.artists);
-            })
-            .catch(function (err) {
-                console.log(err);
-            });
+        songOutput();
+        break;
+    case commandString.whatItSays:
+        // Code for this instance is written above, so we can just break here
         break;
     default:
-        {
-            var movie = formattedInput;
-            axios.get("http://www.omdbapi.com/?apikey=trilogy&t=" + "mr+nobody")
-            .then(function (response) {
-                movieOutput(response);
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
-            break;
-        };
+        // If the user enters nothing, the following message will appear
+        console.log("\n");
+        console.log("Please enter a command and something exciting to search!");
+        break;
+
 };
 
 // Function for `movie-this` command, `do-what-it-says` command, and the default (when no command or other arguments are entered by the user)
@@ -143,6 +142,52 @@ function movieOutput(response) {
     console.log("This movie's actors include " + response.data.Actors + ".");
 
 };
+
+// Function for `spotify-this-song`; this function cannot be used for `do what it says` because the query value is different
+function songOutput(response) {
+    var songSearch = process.argv.slice(3).join(" ");
+    if (songSearch == "") {
+        // If no song is entered, the app defaults to "The Sign" by Ace of Base
+        spotify.search({
+                type: 'track',
+                query: "The Sign"
+            })
+            .then(function (response) {
+                var response = response.tracks.items[9];
+                console.log("\n");
+                console.log("Song Title: " + response.name + "\n");
+                var artists = [];
+                for (var i = 0; i < response.artists.length; i++) {
+                    artists.push(response.artists[i].name);
+                };
+                console.log("Artist(s): " + artists + "\n");
+                console.log("Album: " + response.album.name + "\n");
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
+    } else {
+        spotify
+            .search({
+                type: 'track',
+                query: songSearch
+            })
+            .then(function (response) {
+                var response = response.tracks.items[0];
+                console.log("\n");
+                console.log("Song Title: " + response.name + "\n");
+                var artists = [];
+                for (var i = 0; i < response.artists.length; i++) {
+                    artists.push(response.artists[i].name);
+                };
+                console.log("Artist(s): " + artists + "\n");
+                console.log("Album: " + response.album.name + "\n");
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
+    };
+}
 
 // Function for `concert-this` command and the `do-what-it-says` command
 function concertOutput(response) {
