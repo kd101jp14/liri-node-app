@@ -1,13 +1,26 @@
+var Spotify = require("node-spotify-api");
+
 // connect `dotenv` to the application
 require("dotenv").config();
 
 // Set variables for dependencies and information from other modules
 var keys = require("./keys.js");
-var Spotify = require("node-spotify-api");
-var spotify = new Spotify(keys.spotify);
+
 var axios = require("axios");
 var moment = require("moment");
 var fs = require("fs");
+
+// Spotify constructor
+
+function Spotify(id, secret) {
+    this.id = id;
+    this.secret = secret;
+}
+
+var spotify = new Spotify({
+    id: keys.spotify.id,
+    secret: keys.spotify.secret
+})
 
 // Set values to commands
 var command = process.argv[2];
@@ -71,24 +84,34 @@ switch (command) {
             })
         break;
     case commandString.song:
-
         // Pseudo code (since there was trouble getting authorization from Spotify)
         // 1. Take the formatted user input and assign it to song (ex: var song = formattedInput;)
         // 2. Using axios, make an API call, using the GET method and the search endpoint.
         //      Insert Spotify keys from the keys.js module and the song variable.
         // 3. Log the song's artist(s), song name, preview link of the song from Spotify, and the song's album.
         // 4. If no song is entered, the app defaults to "The Sign" by Ace of Base.
+            var songSearch = process.argv.slice(3).join(" ");
 
-
-        // 
-        // axios.get("https://accounts.spotify.com/authorize/client_id=" + keys.spotify.id +"&response_type=code&redirect_uri=http://localhost:8080/callback/")
-        // axios.get("https://api.spotify.com/v1q=" + song + "&type=track")
-        // .then(function (response) {
-        //     console.log(response.data);
-        // })
-        // .catch(function (error) {
-        //     console.log(error);
-        // })
+        spotify
+            .search({
+                type: 'track',
+                query: songSearch
+            })
+            .then(function (response) {
+                var response = response.tracks.items[0];
+                console.log("\n");
+                console.log("Song Title: " + response.name + "\n");
+                var artists = [];
+                for (var i = 0; i < response.artists.length; i++) {
+                    artists.push(response.artists[i].name);
+                };
+                console.log("Artist(s): " + artists + "\n");
+                console.log("Album: " + response.album.name + "\n");
+                console.log(response.artists);
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
         break;
     default:
         {
