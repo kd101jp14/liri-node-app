@@ -69,6 +69,7 @@ if (command === commandString.whatItSays) {
                     };
                     console.log("Artist(s): " + artists + "\n");
                     console.log("Album: " + response.album.name + "\n");
+                    console.log("Link to song preview: " + response.preview_url);
                 })
                 .catch(function (err) {
                     console.log(err);
@@ -162,6 +163,7 @@ function songOutput(response) {
                 };
                 console.log("Artist(s): " + artists + "\n");
                 console.log("Album: " + response.album.name + "\n");
+                console.log("Link to song preview: " + response.preview_url);
             })
             .catch(function (err) {
                 console.log(err);
@@ -175,7 +177,6 @@ function songOutput(response) {
             .then(function (response) {
                 var response = response.tracks.items[0];
                 console.log("\n");
-                console.log("Link to song preview: " + response.preview_url + "\n");
                 console.log("Song Title: " + response.name + "\n");
                 var artists = [];
                 for (var i = 0; i < response.artists.length; i++) {
@@ -183,6 +184,7 @@ function songOutput(response) {
                 };
                 console.log("Artist(s): " + artists + "\n");
                 console.log("Album: " + response.album.name + "\n");
+                console.log("Link to song preview: " + response.preview_url);
             })
             .catch(function (err) {
                 console.log(err);
