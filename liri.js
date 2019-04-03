@@ -175,6 +175,7 @@ function songOutput(response) {
             .then(function (response) {
                 var response = response.tracks.items[0];
                 console.log("\n");
+                console.log("Link to song preview: " + response.preview_url + "\n");
                 console.log("Song Title: " + response.name + "\n");
                 var artists = [];
                 for (var i = 0; i < response.artists.length; i++) {
