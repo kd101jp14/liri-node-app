@@ -21,15 +21,18 @@ There are four commands:
 
 2. `node liri.js spotify-this-song '<song name here>'`
     This command will provide information about the song title entered.
+    This includes song title, artist(s), album, and a URL to a 30 second preview of the song.
+    Without a song entered, LIRI will default to the song "The Sign" by Ace of Base.
 
 3. `node liri.js movie-this '<movie name here>'`
     This command will provide information about the movie title entered.
+    Without a movie entered, LIRI will default to the movie "Mr. Nobody."
 
 4. `node liri.js do-what-it-says`
     This command will provide random information about an artist/band, song, or movie.
 
 Note: `node liri.js`
-    Without a command, LIRI will provide information about the movie "Mr. Nobody."
+    Without a command, LIRI will ask you to provide a command and something to search.
 
 ## Technologies Used
 - CLI (Git Bash)
